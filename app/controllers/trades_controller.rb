@@ -1,5 +1,6 @@
 class TradesController < ApplicationController
   before_action :set_trade, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show]
 
   # GET /trades
   # GET /trades.json
@@ -14,7 +15,7 @@ class TradesController < ApplicationController
 
   # GET /trades/new
   def new
-    @trade = Trade.new
+    @trade = current_user.trades.build
   end
 
   # GET /trades/1/edit
@@ -24,7 +25,7 @@ class TradesController < ApplicationController
   # POST /trades
   # POST /trades.json
   def create
-    @trade = Trade.new(trade_params)
+    @trade = current_user.trades(trade_params)
 
     respond_to do |format|
       if @trade.save
